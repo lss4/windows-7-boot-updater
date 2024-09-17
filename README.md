@@ -44,10 +44,24 @@ Compilation
 
 It is quite tricky to compile programs that are a mix of C, C++, C++/CLR, and C#. The batch files in the src folder are there to assist in compilation of the program. There are numerous prerequites for compiling though:
 
+* Windows 7 SP1 **32-bit**
 * [7-zip](https://www.7-zip.org/download.html) (used to compress various resources)
 * [MS Visual Studio 2008 SP1 C++ Express](https://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) (for various tools)
 * [Windows 7 SDK and .NET 4 for x86](https://www.microsoft.com/en-us/Download/8442)
 * [Windows AIK for Windows 7 (v3.0)](https://www.microsoft.com/en-us/download/5753)
+
+As of Windows SDK 7.1, you can only install the version that matches your running Windows' architecture. Therefore, you need a **32-bit** version of Windows in order to install the **x86** version of Windows SDK.
+
+In case you cannot install .NET related components which are required by the build process, temporarily change .NET Client and Full version strings to `4.0.30319` in the following places. **Make sure you have backed up your current .NET version strings before editing**:
+
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client\Version
+```
+
+**Once you have installed .NET related components of Windows SDK, revert the .NET Client and Full version strings to your original ones, to avoid potential issues.**
+
+After setting up all the necessary components, you may run `compile-x86-net2.bat` or `compile-x86-net2-quick.bat` to build.
 
 Testing
 -------
