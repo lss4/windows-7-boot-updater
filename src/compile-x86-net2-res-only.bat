@@ -1,6 +1,6 @@
 :: This compiles new resources and inserts them into the program without actually compiling the code.
 
-@set VS90COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools\
+@set VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\
 
 @set OUT=x86-net2
 @set TARGET=x86
