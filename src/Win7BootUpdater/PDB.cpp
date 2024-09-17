@@ -255,7 +255,7 @@ PDB* PDB::Get(const PEFile* pe) {
 		String::Format("{0}\\{1}{2:X}\\{0}", path, guid, cvdde->Age),
 	};
 	array<string>^ dirs = gcnew array<string> {
-		Directory::GetCurrentDirectory(),
+		// Directory::GetCurrentDirectory(),
 		Path::GetDirectoryName(System::Reflection::Assembly::GetExecutingAssembly()->Location),
 	};
 	for (int i = 0; i < files->Length; i++) {

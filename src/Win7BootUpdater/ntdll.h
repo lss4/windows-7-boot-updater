@@ -10,6 +10,18 @@ extern "C" {
 typedef __success(return >= 0) LONG NTSTATUS;
 typedef NTSTATUS *PNTSTATUS;
 
+#if !defined(_NTSYSTEM_)
+#define NTSYSAPI     DECLSPEC_IMPORT
+#define NTSYSCALLAPI DECLSPEC_IMPORT
+#else
+#define NTSYSAPI
+#if defined(_NTDLLBUILD_)
+#define NTSYSCALLAPI
+#else
+#define NTSYSCALLAPI DECLSPEC_ADDRSAFE
+#endif
+#endif
+
 #if _WIN32_WINNT >= 0x0600
 typedef CONST NTSTATUS *PCNTSTATUS;
 #endif // _WIN32_WINNT >= 0x0600
@@ -61,8 +73,10 @@ typedef struct __PUBLIC_OBJECT_TYPE_INFORMATION {
     ULONG Reserved [22];    // reserved for internal use
 } PUBLIC_OBJECT_TYPE_INFORMATION, *PPUBLIC_OBJECT_TYPE_INFORMATION;
 
+#define PASSIVE_LEVEL 0
+
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
-__drv_maxIRQL(PASSIVE_LEVEL)
+// __drv_maxIRQL(PASSIVE_LEVEL)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -78,7 +92,7 @@ ZwDuplicateObject(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
-__drv_maxIRQL(PASSIVE_LEVEL)
+// __drv_maxIRQL(PASSIVE_LEVEL)
 NTSYSAPI
 NTSTATUS
 NTAPI

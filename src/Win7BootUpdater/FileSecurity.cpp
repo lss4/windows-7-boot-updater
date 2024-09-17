@@ -204,7 +204,7 @@ bool FileSecurity::AddCurrentUserAccess(LPCWSTR path) {
 	bool retval = false;
 
 	// Get the old ACL
-	if ((err = GetNamedSecurityInfo(path, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, NULL, NULL, &old_acl, NULL, &sec)) != ERROR_SUCCESS) {
+	if ((err = GetNamedSecurityInfo((LPWSTR)path, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, NULL, NULL, &old_acl, NULL, &sec)) != ERROR_SUCCESS) {
 		return false;
 	}
 
