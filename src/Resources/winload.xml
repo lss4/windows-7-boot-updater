@@ -24,7 +24,7 @@ Alignment (XX = 03 for center, 05 for left, and 09 for right)
 32: C7 43 30 03 00 00 00		C7 43 30 XX 00 00 00 (untested) .text
 64: ??
   -->
-<Patch version="1.0">
+<Patch version="1.1">
   <Version name="7 RTM" value="6.1.7600.16385" />
   <Version name="7 RTM + KB2506014" value="6.1.7600.16757" /><!-- 64-bit winload/winresume only -->
   <Version name="7 SP1" value="6.1.7601.16537" />
@@ -35,6 +35,10 @@ Alignment (XX = 03 for center, 05 for left, and 09 for right)
   <Version name="7 SP1 + KB3146706" value="6.1.7601.23207" />
   <Version name="7 SP1 + KB4012212" value="6.1.7601.23569" />
   <Version name="7 SP1 + KB4457144" value="6.1.7601.24149" />
+  <Version name="7 SP1 + KB5005392" value="6.1.7601.24538" /><!-- Only winload was updated -->
+  <Version name="7 SP1 + KB5014742" value="6.1.7601.25950" /><!-- Change to patch entry 7 on 64-bit -->
+  <Version name="7 SP1 + KB5021291" value="6.1.7601.26220" />
+  <Version name="7 SP1 + KB5030265" value="6.1.7601.26713" />
   <Entry id="1">
     <!-- Allow unsigned bootres.dll -->
     <Platform type="I386">
@@ -166,10 +170,16 @@ Alignment (XX = 03 for center, 05 for left, and 09 for right)
       </Version>
     </Platform>
     <Platform type="AMD64">
-      <Version min="7 RTM">
+      <Version min="7 RTM" max="7 SP1 + KB5014742">
         <PatchDwords>
           <Section>.text</Section>
           <Target>C7 84 24 EC 00 00 00 [?? ?? 00 00] 89 5C 24 44</Target>
+        </PatchDwords>
+      </Version>
+      <Version min="7 SP1 + KB5014742">
+        <PatchDwords>
+          <Section>.text</Section>
+          <Target>C7 84 24 FC 00 00 00 [?? ?? 00 00] 89 5C 24 4C</Target>
         </PatchDwords>
       </Version>
     </Platform>

@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<Patch version="1.0">
+<Patch version="1.1">
   <Version name="7 RTM" value="6.1.7600.16385" />
   <Version name="7 RTM + KB2506014" value="6.1.7600.16757" /><!-- 64-bit winload/winresume only -->
   <Version name="7 SP1" value="6.1.7601.16537" />
@@ -25,6 +25,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <Version name="7 SP1 + KB2949927" value="6.1.7601.18519" /><!-- SP1 only from now on -->
   <Version name="WES7 SP1 + KB3033929" value="6.1.7601.18741" /><!-- only seen 64-bit winresume so far -->
   <Version name="7 SP1 + KB3146706" value="6.1.7601.23003" />
+  <Version name="7 SP1 + KB5014742" value="6.1.7601.25950" />
+  <Version name="7 SP1 + KB5021291" value="6.1.7601.26220" />
+  <Version name="7 SP1 + KB5030265" value="6.1.7601.26713" />
   <Entry id="1">
     <!-- Allow unsigned bootres.dll -->
     <Platform type="I386">
