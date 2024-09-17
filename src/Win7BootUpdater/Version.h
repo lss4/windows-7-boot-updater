@@ -26,12 +26,12 @@
 #define VERSION_MAJOR	0
 #define VERSION_MINOR	0
 #define VERSION_STATUS	VERSION_BETA
-#define VERSION_REV		3
+#define VERSION_REV		4
 
-#define VERSION_RES		"0.0.1.3"
-#define VERSION_FULL	L"0.0.1.3"
-#define VERSION_ASM		L"0.0.1.3" // could also be 0.0.*
-#define VERSION_DESC	L"v0 Beta 3"
+#define VERSION_RES		"0.0.1.4"
+#define VERSION_FULL	L"0.0.1.4"
+#define VERSION_ASM		L"0.0.1.4" // could also be 0.0.*
+#define VERSION_DESC	L"v0 Beta 4"
 
 namespace Win7BootUpdater {
 	/// <remarks>Version information about the the Windows 7 Boot Updater.</remarks>
