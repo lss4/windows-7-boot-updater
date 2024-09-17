@@ -32,6 +32,8 @@ patch-compiler winload.xml
 patch-compiler winresume.xml
 @IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
+@set INCLUDE=%INCLUDE%;C:\Program Files\Microsoft SDKs\Windows\v7.1\Include
+
 rc %RC% /d GUI /fo ..\%OUT%\gui.res app.rc
 @IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 

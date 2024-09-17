@@ -4,6 +4,7 @@
 @set DEBUGGING=OFF
 
 @set WIMGAPI=C:\Program Files\Windows AIK\SDKs\WIMGAPI\%TARGET%
+@set PATH=%PATH%;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin
 :: Only need this for ntdll.h, include it instead in the source directory since the WinDDK is huge
 ::@set WINDDK=C:\WinDDK\7600.16385.1\lib\wlh\%TARGET_FULL%
 
