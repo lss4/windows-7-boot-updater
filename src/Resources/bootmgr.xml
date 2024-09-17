@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 Windows 7 Boot Updater (github.com/coderforlife/windows-7-boot-updater)
 Copyright (C) 2021  Jeffrey Bush - Coder for Life
@@ -15,7 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <Patch version="0.1">
   <Version name="7 RTM" value="6.1.7600.16385" />
   <Version name="7 SP1" value="6.1.7601.16537" />
