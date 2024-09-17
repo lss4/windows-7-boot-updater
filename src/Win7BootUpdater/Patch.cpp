@@ -591,7 +591,7 @@ UInt16 PatchPlatform::Type::get() { return platform; }
 array<PatchVersion^> ^PatchPlatform::Get(UInt64 version) {
 	List<PatchVersion^> ^results = gcnew List<PatchVersion^>();
 	for each (PatchVersion ^v in versions)
-		if (v->Min <= version && (v->NoMax || v->Max >= version))
+		if (v->Min <= version && (v->NoMax || v->Max > version))
 			results->Add(v);
 	return results->ToArray();
 }
