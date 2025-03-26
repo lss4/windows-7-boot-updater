@@ -129,9 +129,9 @@ namespace Win7BootUpdater.Installer
         public static string SkinLicense        { get { return GetBSDescValue("License"); } }
 
         private delegate uint Check(string file);
-        public static readonly string[] names = { "bootres.dll", "winload.exe", "winload.exe.mui", "winresume.exe", "winresume.exe.mui", "bootmgr" };
-        public static readonly string[] defaults = { Bootres.def, Winload.def, Winload.defMui, Winresume.def, Winresume.defMui, Bootmgr.def };
-        private static readonly Check[] checks = { Bootres.Check, Winload.Check, Winload.CheckMui, Winresume.Check, Winresume.CheckMui, Bootmgr.Check };
+        public static readonly string[] names = { "bootres.dll", "winload.efi", "winload.efi.mui", "winresume.efi", "winresume.efi.mui" };
+        public static readonly string[] defaults = { Bootres.def, Winload.def, Winload.defMui, Winresume.def, Winresume.defMui };
+        private static readonly Check[] checks = { Bootres.Check, Winload.Check, Winload.CheckMui, Winresume.Check, Winresume.CheckMui };
 
         #endregion
 
@@ -158,7 +158,7 @@ namespace Win7BootUpdater.Installer
             Exception ex = null;
             try
             {
-                err = Updater.Update(Program.BS, files[0], files[1], files[2], files[3], files[4], files[5], true);
+                err = Updater.Update(Program.BS, files[0], files[1], files[2], files[3], files[4], true);
             }
             catch (Exception _ex) { ex = _ex; }
             if (ex != null && err != 0)

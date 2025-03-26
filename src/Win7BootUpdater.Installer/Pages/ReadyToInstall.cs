@@ -35,10 +35,7 @@ namespace Win7BootUpdater.Installer.Pages
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Program.defaults.Length; ++i)
             {
-                if (i == Program.defaults.Length - 1 && Bootmgr.DefaultIsOnHiddenSystemPartition())
-                    sb.AppendLine("bootmgr "+ UI.GetMessage(Msg.OnHiddenSystemPartition));
-                else
-                    sb.AppendLine(Program.defaults[i]);
+                sb.AppendLine(Program.defaults[i]);
             }
             return sb.ToString().Trim();
         }

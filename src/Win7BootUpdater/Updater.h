@@ -86,7 +86,7 @@ namespace Win7BootUpdater {
 		/// <param name="bootmgr">The path to bootmgr</param>
 		/// <param name="backup">True if backups should be created before modifying the files</param>
 		/// <returns>The error code. If it is 0 there is no error, otherwise pass it to <see cref="UI::ShowError(string,string,uint,string)" /> to process it.</returns>
-		static uint Update(Win7BootUpdater::BootSkin ^bs, string bootres, string winload, string winloadMui, string winresume, string winresumeMui, string bootmgr, bool backup /*, array<string> ^%modifiedPaths*/);
+		static uint Update(Win7BootUpdater::BootSkin ^bs, string bootres, string winload, string winloadMui, string winresume, string winresumeMui, bool backup /*, array<string> ^%modifiedPaths*/);
 
 		/// <summary>Restores modified files</summary>
 		/// <param name="files">The list of full paths of files to restore</param>

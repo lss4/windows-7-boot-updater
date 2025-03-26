@@ -61,8 +61,7 @@ using namespace System::IO;
 
 #define XSL_NAME (winresume ? L"RESUME.XSL" : L"OSLOADER.XSL")
 #define WINX_NAME (winresume ? L"winresume" : L"winload")
-#define WINX_NAME_EXE (winresume ? L"winresume.exe" : L"winload.exe")
-
+#define WINX_NAME_EXE (winresume ? L"winresume.efi" : L"winload.efi")
 
 ///////////////////////////////////////////////////////////////////////////////
 ///// Loading and Checking Functions

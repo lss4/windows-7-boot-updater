@@ -104,10 +104,10 @@ string UI::GetErrorMessage(uint e, string success) {
 	string file = nullptr, res;
 	switch (e & 0xF0) {
 	case ERROR_BOOTRES_BASE:		file = L"bootres.dll";			break;
-	case ERROR_WINLOAD_BASE:		file = L"winload.exe";			break;
-	case ERROR_WINLOAD_MUI_BASE:	file = L"winload.exe.mui";		break;
-	case ERROR_WINRESUME_BASE:		file = L"winresume.exe";		break;
-	case ERROR_WINRESUME_MUI_BASE:	file = L"winresume.exe.mui";	break;
+	case ERROR_WINLOAD_BASE:		file = L"winload.efi";			break;
+	case ERROR_WINLOAD_MUI_BASE:	file = L"winload.efi.mui";		break;
+	case ERROR_WINRESUME_BASE:		file = L"winresume.efi";		break;
+	case ERROR_WINRESUME_MUI_BASE:	file = L"winresume.efi.mui";	break;
 	case ERROR_BOOTMGR_BASE:		file = L"bootmgr";				break;
 	}
 

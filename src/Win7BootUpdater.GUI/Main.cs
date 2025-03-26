@@ -197,7 +197,7 @@ namespace Win7BootUpdater.GUI {
         public static void Threaded(ThreadStart s, string name) { Thread t = new Thread(s); t.Name = name; t.Start(); }
 
         #region Menus
-        private SysFileMenuItem bootres, winload, winloadMui, winresume, winresumeMui, bootmgr;
+        private SysFileMenuItem bootres, winload, winloadMui, winresume, winresumeMui;
         private void createMenu()
         {
             MenuStrip menu = new MenuStrip();
@@ -211,32 +211,15 @@ namespace Win7BootUpdater.GUI {
             ));
             this.bootres = new SysFileMenuItem(Bootres.def, new SysFileMenuItem.Check(Bootres.Check), "bootres.dll|*.dll", true);
             this.bootres.Click += new EventHandler(update_bootres);
-            this.winload = new SysFileMenuItem(Winload.def, new SysFileMenuItem.Check(Winload.Check), "winload.exe|*.exe", true);
-            this.winloadMui = new SysFileMenuItem(Winload.defMui, new SysFileMenuItem.Check(Winload.CheckMui), "winload.exe.mui|*.mui", true);
-            this.winresume = new SysFileMenuItem(Winresume.def, new SysFileMenuItem.Check(Winresume.Check), "winresume.exe|*.exe", true);
-            this.winresumeMui = new SysFileMenuItem(Winresume.defMui, new SysFileMenuItem.Check(Winresume.CheckMui), "winresume.exe.mui|*.mui", true);
-
-            ToolStripMenuItem bm;
-            bool hid = Bootmgr.DefaultIsOnHiddenSystemPartition();
-            this.bootmgr = new SysFileMenuItem(hid ? Bootmgr.defFallBack : Bootmgr.def, new SysFileMenuItem.Check(Bootmgr.Check), "bootmgr|bootmgr", !hid);
-            if (hid)
-            {
-                this.bootmgr.Tag = bm = Builder.createMenuItem(new EventHandler(this.setBootmgrToHiddenDrive));
-                Builder.AddTranslatableItem(new TranslatableOnHiddenSystemDrive(bm));
-                bm.Image = Main.yes;
-                bm = Builder.createMenuItem(bm, this.bootmgr);
-                Builder.AddTranslatableItem(new TranslatableOnHiddenSystemDrive(bm));
-                bm.Image = Main.yes;
-            }
-            else
-            {
-                bm = this.bootmgr;
-            }
+            this.winload = new SysFileMenuItem(Winload.def, new SysFileMenuItem.Check(Winload.Check), "winload.efi|*.efi", true);
+            this.winloadMui = new SysFileMenuItem(Winload.defMui, new SysFileMenuItem.Check(Winload.CheckMui), "winload.efi.mui|*.mui", true);
+            this.winresume = new SysFileMenuItem(Winresume.def, new SysFileMenuItem.Check(Winresume.Check), "winresume.efi|*.efi", true);
+            this.winresumeMui = new SysFileMenuItem(Winresume.defMui, new SysFileMenuItem.Check(Winresume.CheckMui), "winresume.efi.mui|*.mui", true);
 
             menu.Items.Add(Builder.createMenuItem(Msg.Options_Menu,
                 Builder.createMenuItem(Msg.SelectWindowsFolder_Menu, new EventHandler(this.selectWindowsFolder)),
                 new ToolStripSeparator(),
-                this.bootres, this.winload, this.winloadMui, this.winresume, this.winresumeMui, bm,
+                this.bootres, this.winload, this.winloadMui, this.winresume, this.winresumeMui,
                 new ToolStripSeparator(),
                 Builder.createMenuItem(Msg.RestoreBackups, new EventHandler(this.restore))
             ));
@@ -271,7 +254,7 @@ namespace Win7BootUpdater.GUI {
             //d.Description = UI.GetMessage(Msg.SelectTheFolderThatContainsTheAnimation) + " " + Animation.DirDesc;
             if (d.ShowDialog() == DialogResult.OK)
             {
-                string bootmgr = null, bootres = null, winload = null, winloadMui = null, winresume = null, winresumeMui = null;
+                string bootres = null, winload = null, winloadMui = null, winresume = null, winresumeMui = null;
 
                 Updater.DisableFSRedirection();
 
@@ -279,49 +262,38 @@ namespace Win7BootUpdater.GUI {
                 string sys32 = Path.Combine(win, "System32");
                 string parent = Path.GetDirectoryName(win);
 
-                bootmgr = IfPathExists(Path.Combine(parent, "bootmgr"));
-
                 if (Directory.Exists(sys32))
                 {
                     bootres = IfPathExists(Path.Combine(sys32, "bootres.dll"));
-                    winload = IfPathExists(Path.Combine(sys32, "winload.exe"));
-                    winresume = IfPathExists(Path.Combine(sys32, "winresume.exe"));
+                    winload = IfPathExists(Path.Combine(sys32, "winload.efi"));
+                    winresume = IfPathExists(Path.Combine(sys32, "winresume.efi"));
 
                     string sys32l = Path.Combine(sys32, Updater.GetPreferredLocale());
                     if (!Directory.Exists(sys32l)) sys32l = Path.Combine(sys32, "en-US");
                     if (Directory.Exists(sys32l))
                     {
-                        winloadMui   = IfPathExists(Path.Combine(sys32l, "winload.exe.mui"));
-                        winresumeMui = IfPathExists(Path.Combine(sys32l, "winresume.exe.mui"));
+                        winloadMui   = IfPathExists(Path.Combine(sys32l, "winload.efi.mui"));
+                        winresumeMui = IfPathExists(Path.Combine(sys32l, "winresume.efi.mui"));
                     }
 
-                    if (winloadMui == null)   winloadMui   = IfPathExists(Path.Combine(sys32, "winload.exe.mui"));
-                    if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(sys32, "winresume.exe.mui"));
+                    if (winloadMui == null)   winloadMui   = IfPathExists(Path.Combine(sys32, "winload.efi.mui"));
+                    if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(sys32, "winresume.efi.mui"));
                 }
 
-                if (bootmgr == null)
-                {
-                    string boot = Path.Combine(win, "Boot"), pcat = Path.Combine(boot, "PCAT");
-                    if (Directory.Exists(pcat))
-                        bootmgr = IfPathExists(Path.Combine(pcat, "bootmgr"));
-                }
-
-                if (bootmgr == null)      bootmgr      = IfPathExists(Path.Combine(win, "bootmgr"));
                 if (bootres == null)      bootres      = IfPathExists(Path.Combine(win, "bootres.dll"));
-                if (winload == null)      winload      = IfPathExists(Path.Combine(win, "winload.exe"));
-                if (winloadMui == null)   winloadMui   = IfPathExists(Path.Combine(win, "winload.exe.mui"));
-                if (winresume == null)    winresume    = IfPathExists(Path.Combine(win, "winresume.exe"));
-                if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(win, "winresume.exe.mui"));
+                if (winload == null)      winload      = IfPathExists(Path.Combine(win, "winload.efi"));
+                if (winloadMui == null)   winloadMui   = IfPathExists(Path.Combine(win, "winload.efi.mui"));
+                if (winresume == null)    winresume    = IfPathExists(Path.Combine(win, "winresume.efi"));
+                if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(win, "winresume.efi.mui"));
 
                 Updater.RevertFSRedirection();
 
                 List<string> updated = new List<string>(5);
-                if (bootmgr != null)      { this.bootmgr.SetFileFull(bootmgr);           updated.Add("bootmgr"); }
                 if (bootres != null)      { this.bootres.SetFileFull(bootres);           updated.Add("bootres.dll"); }
-                if (winload != null)      { this.winload.SetFileFull(winload);           updated.Add("winload.exe");}
-                if (winloadMui != null)   { this.winloadMui.SetFileFull(winloadMui);     updated.Add("winload.exe.mui");}
-                if (winresume != null)    { this.winresume.SetFileFull(winresume);       updated.Add("winresume.exe");}
-                if (winresumeMui != null) { this.winresumeMui.SetFileFull(winresumeMui); updated.Add("winresume.exe.mui"); }
+                if (winload != null)      { this.winload.SetFileFull(winload);           updated.Add("winload.efi");}
+                if (winloadMui != null)   { this.winloadMui.SetFileFull(winloadMui);     updated.Add("winload.efi.mui");}
+                if (winresume != null)    { this.winresume.SetFileFull(winresume);       updated.Add("winresume.efi");}
+                if (winresumeMui != null) { this.winresumeMui.SetFileFull(winresumeMui); updated.Add("winresume.efi.mui"); }
 
                 if (updated.Count == 0)
                     ShowMessage(UI.GetMessage(Msg.NoAcceptableFilesWereFound), UI.GetMessage(Msg.SelectWindowsFolder), MessageBoxIcon.None);
@@ -347,15 +319,7 @@ namespace Win7BootUpdater.GUI {
             this.updateFrameTootip((uint)frames.Value);
             this.playPauseChanged(preview.Playing);
         }
-        private void setBootmgrToHiddenDrive(object sender, EventArgs e)
-        {
-            this.bootmgr.Active = false;
-            ToolStripMenuItem t = (ToolStripMenuItem)sender;
-            t.Image = Main.yes;
-            t.OwnerItem.Text = t.Text;
-            t.OwnerItem.Tag = true;
-            t.OwnerItem.Image = Main.yes;
-        }
+
         private void update_bootres(object sender, EventArgs e) { Preview.SetDefaultAnimSource(bootres.File); }
         private void load(object sender, EventArgs e)
         {
@@ -1080,27 +1044,19 @@ namespace Win7BootUpdater.GUI {
         #endregion
 
         #region Check and Restore
-        private string GetSelectedBootmgrPath()
-        {
-            bool hid = Bootmgr.DefaultIsOnHiddenSystemPartition() && !bootmgr.Active;
-            return hid ? Bootmgr.def : bootmgr.File;
-        }
-
         private bool checkAll()
         {
-            bool hid = Bootmgr.DefaultIsOnHiddenSystemPartition() && !bootmgr.Active;
             bootres.ProcessError();
             winload.ProcessError();
             winloadMui.ProcessError();
             winresume.ProcessError();
             winresumeMui.ProcessError();
-            if (!hid) bootmgr.ProcessError();
-            return bootres.IsValid() && winload.IsValid() && winloadMui.IsValid() && winresume.IsValid() && winresumeMui.IsValid() && (hid || bootmgr.IsValid());
+            return bootres.IsValid() && winload.IsValid() && winloadMui.IsValid() && winresume.IsValid() && winresumeMui.IsValid();
         }
         private void restore(object sender, EventArgs e)
         {
             this.preview.Pause();
-            string[] files = new string[] { bootres.File, winload.File, winloadMui.File, winresume.File, winresumeMui.File, GetSelectedBootmgrPath() };
+            string[] files = new string[] { bootres.File, winload.File, winloadMui.File, winresume.File, winresumeMui.File };
             string[] sources = Updater.Restore(files);
             string s = "";
             for (int i = 0; i < files.Length; ++i) {
@@ -1155,7 +1111,7 @@ namespace Win7BootUpdater.GUI {
             while (!this.progress.Visible) { Thread.Sleep(0); }
             try
             {
-                error = Updater.Update(preview.bs, bootres.File, winload.File, winloadMui.File, winresume.File, winresumeMui.File, GetSelectedBootmgrPath(), true);
+                error = Updater.Update(preview.bs, bootres.File, winload.File, winloadMui.File, winresume.File, winresumeMui.File, true);
             }
             catch (Exception _ex) { ex = _ex; }
             this.Invoke(new dFinishUpdate(this.finishUpdate), error, ex);

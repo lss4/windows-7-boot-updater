@@ -119,7 +119,6 @@ namespace Win7BootUpdater.CUI
             Console.WriteLine("  " + UI.GetMessage(Msg.FileDefault, "/WinloadMui", defaults["winloadmui"]));
             Console.WriteLine("  " + UI.GetMessage(Msg.FileDefault, "/Winresume", defaults["winresume"]));
             Console.WriteLine("  " + UI.GetMessage(Msg.FileDefault, "/WinresumeMui", defaults["winresumemui"]));
-            Console.WriteLine("  " + UI.GetMessage(Msg.FileDefault, "/Bootmgr", Bootmgr.DefaultIsOnHiddenSystemPartition() ? UI.GetMessage(Msg.OnHiddenSystemPartition) : defaults["bootmgr"]));
             Console.WriteLine();
             Console.WriteLine(UI.GetMessage(Msg.YouCanUseTheGUIProgramToCreateBS7Files));
             Console.WriteLine();
@@ -206,68 +205,55 @@ namespace Win7BootUpdater.CUI
             defaults.Add("winloadmui", Winload.defMui);
             defaults.Add("winresume", Winresume.def);
             defaults.Add("winresumemui", Winresume.defMui);
-            defaults.Add("bootmgr", Bootmgr.def);
 
             checks.Add("bootres", Bootres.Check);
             checks.Add("winload", Winload.Check);
             checks.Add("winloadmui", Winload.CheckMui);
             checks.Add("winresume", Winresume.Check);
             checks.Add("winresumemui", Winresume.CheckMui);
-            checks.Add("bootmgr", Bootmgr.Check);
         }
         private static string IfPathExists(string path) { return File.Exists(path) ? path : null; }
         static void LoadFileFromFolder(string win, Dictionary<string, string> opts)
         {
-            string bootmgr = null, bootres = null, winload = null, winloadMui = null, winresume = null, winresumeMui = null;
+            string bootres = null, winload = null, winloadMui = null, winresume = null, winresumeMui = null;
 
             Updater.DisableFSRedirection();
 
             string sys32 = Path.Combine(win, "System32");
             string parent = Path.GetDirectoryName(win);
 
-            bootmgr = IfPathExists(Path.Combine(parent, "bootmgr"));
-
             if (Directory.Exists(sys32))
             {
                 bootres = IfPathExists(Path.Combine(sys32, "bootres.dll"));
-                winload = IfPathExists(Path.Combine(sys32, "winload.exe"));
-                winresume = IfPathExists(Path.Combine(sys32, "winresume.exe"));
+                winload = IfPathExists(Path.Combine(sys32, "winload.efi"));
+                winresume = IfPathExists(Path.Combine(sys32, "winresume.efi"));
 
                 string sys32l = Path.Combine(sys32, Updater.GetPreferredLocale());
                 if (!Directory.Exists(sys32l)) sys32l = Path.Combine(sys32, "en-US");
                 if (Directory.Exists(sys32l))
                 {
-                    winloadMui = IfPathExists(Path.Combine(sys32l, "winload.exe.mui"));
-                    winresumeMui = IfPathExists(Path.Combine(sys32l, "winresume.exe.mui"));
+                    winloadMui = IfPathExists(Path.Combine(sys32l, "winload.efi.mui"));
+                    winresumeMui = IfPathExists(Path.Combine(sys32l, "winresume.efi.mui"));
                 }
 
-                if (winloadMui == null) winloadMui = IfPathExists(Path.Combine(sys32, "winload.exe.mui"));
-                if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(sys32, "winresume.exe.mui"));
+                if (winloadMui == null) winloadMui = IfPathExists(Path.Combine(sys32, "winload.efi.mui"));
+                if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(sys32, "winresume.efi.mui"));
             }
 
-            if (bootmgr == null)
-            {
-                string boot = Path.Combine(win, "Boot"), pcat = Path.Combine(boot, "PCAT");
-                if (Directory.Exists(pcat))
-                    bootmgr = IfPathExists(Path.Combine(pcat, "bootmgr"));
-            }
-
-            if (bootmgr == null) bootmgr = IfPathExists(Path.Combine(win, "bootmgr"));
             if (bootres == null) bootres = IfPathExists(Path.Combine(win, "bootres.dll"));
-            if (winload == null) winload = IfPathExists(Path.Combine(win, "winload.exe"));
-            if (winloadMui == null) winloadMui = IfPathExists(Path.Combine(win, "winload.exe.mui"));
-            if (winresume == null) winresume = IfPathExists(Path.Combine(win, "winresume.exe"));
-            if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(win, "winresume.exe.mui"));
+            if (winload == null) winload = IfPathExists(Path.Combine(win, "winload.efi"));
+            if (winloadMui == null) winloadMui = IfPathExists(Path.Combine(win, "winload.efi.mui"));
+            if (winresume == null) winresume = IfPathExists(Path.Combine(win, "winresume.efi"));
+            if (winresumeMui == null) winresumeMui = IfPathExists(Path.Combine(win, "winresume.efi.mui"));
 
             Updater.RevertFSRedirection();
 
             List<string> updated = new List<string>(5);
-            if (bootmgr != null) { opts["bootmgr"] = bootmgr; updated.Add("bootmgr"); }
             if (bootres != null) { opts["bootres"] = bootres; updated.Add("bootres.dll"); }
-            if (winload != null) { opts["winload"] = winload; updated.Add("winload.exe"); }
-            if (winloadMui != null) { opts["winloadMui"] = winloadMui; updated.Add("winload.exe.mui"); }
-            if (winresume != null) { opts["winresume"] = winresume; updated.Add("winresume.exe"); }
-            if (winresumeMui != null) { opts["winresumeMui"] = winresumeMui; updated.Add("winresume.exe.mui"); }
+            if (winload != null) { opts["winload"] = winload; updated.Add("winload.efi"); }
+            if (winloadMui != null) { opts["winloadMui"] = winloadMui; updated.Add("winload.efi.mui"); }
+            if (winresume != null) { opts["winresume"] = winresume; updated.Add("winresume.efi"); }
+            if (winresumeMui != null) { opts["winresumeMui"] = winresumeMui; updated.Add("winresume.efi.mui"); }
 
             if (updated.Count == 0)
                 Console.WriteLine(UI.GetMessage(Msg.SelectWindowsFolder) + ": " + UI.GetMessage(Msg.NoAcceptableFilesWereFound));
@@ -358,7 +344,7 @@ namespace Win7BootUpdater.CUI
 		
         static int Restore(Dictionary<string, string> opts)
         {
-            string[] files = new string[] { opts["bootres"], opts["winload"], opts["winloadmui"], opts["winresume"], opts["winresumemui"], opts["bootmgr"] };
+            string[] files = new string[] { opts["bootres"], opts["winload"], opts["winloadmui"], opts["winresume"], opts["winresumemui"] };
             string[] sources = Updater.Restore(files);
             bool any = false;
             for (int i = 0; i < files.Length; ++i)
@@ -401,7 +387,7 @@ namespace Win7BootUpdater.CUI
             Exception ex = null;
             try
             {
-                error = Updater.Update(bs, opts["bootres"], opts["winload"], opts["winloadmui"], opts["winresume"], opts["winresumemui"], opts["bootmgr"], true);
+                error = Updater.Update(bs, opts["bootres"], opts["winload"], opts["winloadmui"], opts["winresume"], opts["winresumemui"], true);
             }
             catch (Exception _ex) { ex = _ex; }
 

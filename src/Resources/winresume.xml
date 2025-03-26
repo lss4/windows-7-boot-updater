@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <Version name="7 SP1 + KB2949927" value="6.1.7601.18519" /><!-- SP1 only from now on -->
   <Version name="WES7 SP1 + KB3033929" value="6.1.7601.18741" /><!-- only seen 64-bit winresume so far -->
   <Version name="7 SP1 + KB3146706" value="6.1.7601.23003" />
+  <Version name="7 SP1 2020 EOL" value="6.1.7601.24545" />
   <Version name="7 SP1 + KB5014742" value="6.1.7601.25950" />
   <Version name="7 SP1 + KB5021291" value="6.1.7601.26220" />
   <Version name="7 SP1 + KB5030265" value="6.1.7601.26713" />

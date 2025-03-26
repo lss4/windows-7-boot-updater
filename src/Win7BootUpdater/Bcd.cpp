@@ -169,6 +169,10 @@ string BCD::GetGUID(BcdObject ^o, unsigned int t) {
 	return o->GetElement(t, mbo) ? (string)mbo[L"Id"] : nullptr;
 }
 
+bool BCD::SetDisableIntegrityCheck(BcdObject ^o) {
+	return o->SetBooleanElement(true, BcdLibraryBoolean_DisableIntegrityChecks);
+}
+
 /*inline static array<string> ^GetIds(BcdObject ^o, unsigned int t) {
 	ManagementBaseObject ^mbo;
 	return o->GetElement(t, mbo) ? (array<string>^)mbo[L"Ids"] : nullptr;
@@ -367,8 +371,6 @@ string BCD::GetFilePath(BcdObject ^o, string name) {
 	path = BCD::GetString(o, BcdLibraryString_ApplicationPath);
 	if (path == nullptr)
 		path = name;
-	else if (path->ToLower()->EndsWith(L"efi")) // NOT SUPPORTED YET!
-		throw gcnew Exception(Msg_PathInTheBCDReferencesAnEFIWhichIsCurrentlyNotSupported(name));
 
 	path = device->TrimEnd(L'\\') + L"\\" + path->TrimStart(L'\\');
 	

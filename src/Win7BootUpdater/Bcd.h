@@ -38,6 +38,7 @@ namespace Win7BootUpdater {
 		static property string PreferredLocale { string get(); }						// does not throw exceptions
 		static string GetGUID(ROOT::WMI::BcdObject ^o, unsigned int t);					// can throw exception
 		static string GetFilePath(ROOT::WMI::BcdObject ^o, string name);				// can throw exception
+		static bool SetDisableIntegrityCheck(ROOT::WMI::BcdObject ^o);					// can throw exception
 		static ROOT::WMI::BcdObject ^GetBootLoader(string guid);						// can throw exception
 		static property ROOT::WMI::BcdObject ^Bootmgr { ROOT::WMI::BcdObject ^get(); }	// can throw exception
 		static property ROOT::WMI::BcdObject ^Current { ROOT::WMI::BcdObject ^get(); }  // can throw exception, fallback to Default if current is not available

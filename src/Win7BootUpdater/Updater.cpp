@@ -138,10 +138,10 @@ static uint UpdateWinXXX(BootSkinFile ^bs, string path, string muiPath, FileUpda
 static uint IncOrFinishUp(bool b, FileUpdater %f, uint error) { if (b) UI::Inc(); return b ? error : f.FinishUp(error); }
 
 //mixed
-uint Updater::Update(BootSkin ^bs, string bootresPath, string winloadPath, string winloadMuiPath, string winresumePath, string winresumeMuiPath, string bootmgrPath, bool backup /*, array<string> ^%modifiedPaths*/) {
+uint Updater::Update(BootSkin ^bs, string bootresPath, string winloadPath, string winloadMuiPath, string winresumePath, string winresumeMuiPath, bool backup /*, array<string> ^%modifiedPaths*/) {
 	uint error = ERROR_SUCCESS;
 
-	FileUpdater bootres, bootresAlt, winload, winloadMui, winresume, winresumeMui, bootmgr;
+	FileUpdater bootres, bootresAlt, winload, winloadMui, winresume, winresumeMui;
 	BootSkinFile ^bsWinload = bs->Winload, ^bsWinresume = bs->Winresume;
 
 	DISABLE_FS_REDIR();
@@ -155,9 +155,13 @@ uint Updater::Update(BootSkin ^bs, string bootresPath, string winloadPath, strin
 		error = UpdateWinXXX(bsWinload, winloadPath, winloadMuiPath, winload, winloadMui, backup, error);
 		error = UpdateWinXXX(bsWinresume, winresumePath, winresumeMuiPath, winresume, winresumeMui, backup, error);
 
-		// Bootmgr (7 increments)
-		if (error == ERROR_SUCCESS && (error = bootmgr.Init(ERROR_BOOTMGR_BASE, bootmgrPath, backup)) == ERROR_SUCCESS) { // 1 increment
-			error = Bootmgr::Update(bootmgr); // 6 increments
+		// For UEFI, instead of patching bootmgr, try setting nointegritychecks on in the BCD part.
+		if (error == ERROR_SUCCESS) {
+			if (BCD::SetDisableIntegrityCheck(BCD::Current) == true) {
+				UI::Inc(7);
+			} else {
+				error = ERROR_BOOTMGR_HACK;
+			}
 		}
 	} catch (Exception ^) {
 		error = ERROR_THROWN;
@@ -176,10 +180,10 @@ uint Updater::Update(BootSkin ^bs, string bootresPath, string winloadPath, strin
 		error = winloadMui.FinishUp(error);
 		error = winresume.FinishUp(error);
 		error = winresumeMui.FinishUp(error);
-		error = bootmgr.FinishUp(error);
+		UI::Inc(1);
 	}
 	//if (error == 0)
-	//	modifiedPaths = gcnew array<string>{bootres.Backup, bootresAlt.Backup, winload.Backup, winloadMui.Backup, winresume.Backup, winresumeMui.Backup, bootmgr.Backup};
+	//	modifiedPaths = gcnew array<string>{bootres.Backup, bootresAlt.Backup, winload.Backup, winloadMui.Backup, winresume.Backup, winresumeMui.Backup };
 	return error;
 }
 

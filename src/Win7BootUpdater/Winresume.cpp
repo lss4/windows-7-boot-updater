@@ -33,9 +33,9 @@ string Winresume::GetDefaultResumeMsg() { return WinXXX::GetDefaultStartupMsg(tr
 string Winresume::def::get() {
 	if (!_def) {
 		try {
-			_def = BCD::GetFilePath(BCD::GetBootLoader(BCD::GetGUID(BCD::Current, BcdOSLoaderObject_AssociatedResumeObject)), L"winresume.exe");
+			_def = BCD::GetFilePath(BCD::GetBootLoader(BCD::GetGUID(BCD::Current, BcdOSLoaderObject_AssociatedResumeObject)), L"winresume.efi");
 		} catch (Exception ^ex) {
-			UI::ShowError(ex->Message, UI::GetMessage(Msg::ErrorWhileGettingPath, L"winresume.exe"));
+			UI::ShowError(ex->Message, UI::GetMessage(Msg::ErrorWhileGettingPath, L"winresume.efi"));
 			_def = defFallBack;
 		}
 	}

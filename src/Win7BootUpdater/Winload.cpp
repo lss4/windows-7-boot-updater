@@ -33,9 +33,9 @@ string Winload::GetDefaultStartupMsg() { return WinXXX::GetDefaultStartupMsg(fal
 string Winload::def::get() {
 	if (!_def) {
 		try {
-			_def = BCD::GetFilePath(BCD::Current, L"winload.exe");
+			_def = BCD::GetFilePath(BCD::Current, L"winload.efi");
 		} catch (Exception ^ex) {
-			UI::ShowError(ex->Message, UI::GetMessage(Msg::ErrorWhileGettingPath, L"winload.exe"));
+			UI::ShowError(ex->Message, UI::GetMessage(Msg::ErrorWhileGettingPath, L"winload.efi"));
 			_def = defFallBack;
 		}
 	}
